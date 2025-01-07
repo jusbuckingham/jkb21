@@ -1,0 +1,24 @@
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  password_hash String
+  createdAt     DateTime @default(now())
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id                 Int      @id @default(autoincrement())
+  userId             Int
+  status             String
+  stripeSubscriptionId String
+  createdAt          DateTime @default(now())
+  user               User     @relation(fields: [userId], references: [id])
+}
+
+model Content {
+  id        Int      @id @default(autoincrement())
+  title     String
+  type      String
+  key       String   // S3 key
+  createdAt DateTime @default(now())
+}
