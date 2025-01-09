@@ -1,13 +1,19 @@
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
-    const token = request.cookies.get('token');
-    const authPages = ['/auth/login', '/auth/signup'];
+export async function middleware(request: Request) {
+    const token = request.cookies.get('token'); // Use a JWT or session to identify the user
 
-    if (!token && !authPages.includes(request.nextUrl.pathname)) {
+    if (!token) {
         return NextResponse.redirect(new URL('/auth/login', request.url));
     }
+
+    // Fetch subscription status from your database
+    const isSubscribed = true; // Replace with real subscription status
+
+    if (!isSubscribed) {
+        return NextResponse.redirect(new URL('/pricing', request.url));
+    }
+
     return NextResponse.next();
 }
 
